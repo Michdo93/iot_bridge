@@ -84,12 +84,7 @@ class IotUpdates(object):
 
     def polling_header(self):
         """ Header for OpenHAB REST request """
-        return {
-            "Authorization": "Basic %s" % self.cmd.auth,
-            # "X-Atmosphere-Transport": "streaming",
-            # "X-Atmosphere-tracking-id": self.iot_rest_id,
-            "X-Atmosphere-Framework": "1.0",
-            "Accept": "application/json"}
+        return {"Accept": "application/json"}
 
     def clear_prev_states(self):
         """ Clear the previous states dictionary """
@@ -171,10 +166,10 @@ class IotParams(object):
     """
 
     def __init__(self):
-        self.iot_host = rospy.get_param(BASENAME + '/host', "localhost")
-        self.iot_port = rospy.get_param(BASENAME + '/port', 8080)
-        self.username = rospy.get_param(BASENAME + '/username', "openhab")
-        self.password = rospy.get_param(BASENAME + '/password', "")
+        self.iot_host = rospy.get_param(BASENAME + '/host')
+        self.iot_port = rospy.get_param(BASENAME + '/port)
+        self.username = rospy.get_param(BASENAME + '/username')
+        self.password = rospy.get_param(BASENAME + '/password')
         self.poll_rate = rospy.get_param(BASENAME + '/pollrate', 2)
 
 
@@ -193,9 +188,18 @@ class IotCommands(object):
         rospy.loginfo("ROS Subscribe: " + BASENAME + "_set")
         rospy.Subscriber("%s_set" % BASENAME, KeyValue, self.set_cb)
 
-        self.auth = base64.encodestring(
-            '%s:%s' % (self.params.username, self.params.password)
-            ).replace('\n', '')
+        self.auth = None
+        if self.params.username is not None or len(self.params.username) != 1:
+            if self.params.password is not None or len(self.params.password) != 1:
+                self.auth = base64.encodestring(
+                    '%s:%s' % (self.params.username, self.params.password)
+                    ).replace('\n', '')
+            else:
+                self.auth = base64.encodestring(
+                '%s:%s' % (self.params.username, "")
+                    ).replace('\n', '')
+        else:
+            self.auth = None
         self.upd = IotUpdates(self, self.params)
         self.command_count = 0
         self.error_count = 0
@@ -204,9 +208,7 @@ class IotCommands(object):
 
     def basic_header(self):
         """ Header for OpenHAB REST request - standard """
-        return {
-                "Authorization": "Basic %s" % self.auth,
-                "Content-type": "text/plain"}
+        return {"Content-type": "text/plain"}
 
     def update_server(self, key, value, isCommand):
         """
