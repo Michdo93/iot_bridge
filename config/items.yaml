@@ -1,3 +1,5 @@
 # OpenHAB server location.
 host: localhost
 port: 8080
+username: ''
+password: ''
