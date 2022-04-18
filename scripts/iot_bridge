@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''
 Copyright (c) 2015, Answer17.  All rights reserved.
 All rights reserved.
@@ -167,7 +167,7 @@ class IotParams(object):
 
     def __init__(self):
         self.iot_host = rospy.get_param(BASENAME + '/host')
-        self.iot_port = rospy.get_param(BASENAME + '/port)
+        self.iot_port = rospy.get_param(BASENAME + '/port')
         self.username = rospy.get_param(BASENAME + '/username')
         self.password = rospy.get_param(BASENAME + '/password')
         self.poll_rate = rospy.get_param(BASENAME + '/pollrate', 2)
@@ -191,13 +191,13 @@ class IotCommands(object):
         self.auth = None
         if self.params.username is not None or len(self.params.username) != 1:
             if self.params.password is not None or len(self.params.password) != 1:
-                self.auth = base64.encodestring(
+                self.auth = base64.encodestring((
                     '%s:%s' % (self.params.username, self.params.password)
-                    ).replace('\n', '')
+                    ).replace('\n', '').encode()).decode().strip()
             else:
-                self.auth = base64.encodestring(
+                self.auth = base64.encodestring((
                 '%s:%s' % (self.params.username, "")
-                    ).replace('\n', '')
+                    ).replace('\n', '').enconde()).decode().strip()
         else:
             self.auth = None
         self.upd = IotUpdates(self, self.params)
