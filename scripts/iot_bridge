@@ -167,7 +167,7 @@ class IotParams(object):
 
     def __init__(self):
         self.iot_host = rospy.get_param(BASENAME + '/host')
-        self.iot_port = rospy.get_param(BASENAME + '/port)
+        self.iot_port = rospy.get_param(BASENAME + '/port')
         self.username = rospy.get_param(BASENAME + '/username')
         self.password = rospy.get_param(BASENAME + '/password')
         self.poll_rate = rospy.get_param(BASENAME + '/pollrate', 2)
