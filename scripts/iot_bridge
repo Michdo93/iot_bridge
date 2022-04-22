@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 '''
 Copyright (c) 2015, Answer17.  All rights reserved.
 All rights reserved.
@@ -191,13 +191,13 @@ class IotCommands(object):
         self.auth = None
         if self.params.username is not None or len(self.params.username) != 1:
             if self.params.password is not None or len(self.params.password) != 1:
-                self.auth = base64.encodestring((
+                self.auth = base64.encodestring(
                     '%s:%s' % (self.params.username, self.params.password)
-                    ).replace('\n', '').encode()).decode().strip()
+                    ).replace('\n', '')
             else:
-                self.auth = base64.encodestring((
+                self.auth = base64.encodestring(
                 '%s:%s' % (self.params.username, "")
-                    ).replace('\n', '').enconde()).decode().strip()
+                    ).replace('\n', '')
         else:
             self.auth = None
         self.upd = IotUpdates(self, self.params)
